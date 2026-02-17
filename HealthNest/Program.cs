@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components.Authorization;
+using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using HealthNest.Components;
@@ -6,6 +7,12 @@ using HealthNest.Components.Account;
 using HealthNest.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(port))
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+}
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

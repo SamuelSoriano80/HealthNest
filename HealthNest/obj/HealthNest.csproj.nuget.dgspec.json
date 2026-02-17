@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Samuel Escuela P3\\HealthNest\\healthnest\\HealthNest.csproj": {}
+    "E:\\Samuel Escuela P3\\HealthNest\\HealthNest\\HealthNest.csproj": {}
   },
   "projects": {
-    "E:\\Samuel Escuela P3\\HealthNest\\healthnest\\HealthNest.csproj": {
+    "E:\\Samuel Escuela P3\\HealthNest\\HealthNest\\HealthNest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Samuel Escuela P3\\HealthNest\\healthnest\\HealthNest.csproj",
+        "projectUniqueName": "E:\\Samuel Escuela P3\\HealthNest\\HealthNest\\HealthNest.csproj",
         "projectName": "HealthNest",
-        "projectPath": "E:\\Samuel Escuela P3\\HealthNest\\healthnest\\HealthNest.csproj",
+        "projectPath": "E:\\Samuel Escuela P3\\HealthNest\\HealthNest\\HealthNest.csproj",
         "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "E:\\Samuel Escuela P3\\HealthNest\\healthnest\\obj\\",
+        "outputPath": "E:\\Samuel Escuela P3\\HealthNest\\HealthNest\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
