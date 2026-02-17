@@ -58,15 +58,24 @@
                             <h5 class="card-title mb-0">Quick Stats</h5>
                         </div>
                         <div class="card-body">
-                            @if (todayCheckIn != null)
+                            @{
+                                var weekStart = DateOnly.FromDateTime(DateTime.Now).AddDays(-6);
+                                var weekCheckIns = checkIns.Where(c => c.Date >= weekStart).ToList();
+                                var hasWeekly = weekCheckIns.Any();
+                                double avgSleep = hasWeekly ? weekCheckIns.Average(c => (double)c.SleepHours) : 0.0;
+                                double avgWater = hasWeekly ? (double)weekCheckIns.Average(c => (decimal)c.WaterIntake) : 0.0;
+                                double avgExercise = hasWeekly ? weekCheckIns.Average(c => (double)c.ExerciseMinutes) : 0.0;
+                            }
+
+                            @if (hasWeekly)
                             {
-                                <p class="mb-2"><span class="badge bg-success">Sleep</span> @todayCheckIn.SleepHours h</p>
-                                <p class="mb-2"><span class="badge bg-info">Water</span> @todayCheckIn.WaterIntake L</p>
-                                <p class="mb-2"><span class="badge bg-warning">Exercise</span> @todayCheckIn.ExerciseMinutes min</p>
+                                <p class="mb-2"><span class="badge bg-success">Sleep (7-day avg)</span> @String.Format("{0:0.0}", avgSleep) h</p>
+                                <p class="mb-2"><span class="badge bg-info">Water (7-day avg)</span> @String.Format("{0:0.0}", avgWater) L</p>
+                                <p class="mb-2"><span class="badge bg-warning">Exercise (7-day avg)</span> @String.Format("{0:0.0}", avgExercise) min</p>
                             }
                             else
                             {
-                                <p class="text-muted">Complete your check-in to see stats.</p>
+                                <p class="text-muted">No check-ins in the last 7 days. Complete your check-in to see weekly stats.</p>
                             }
                         </div>
                     </div>

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xe+r7a5QXO0=",
+  "dgSpecHash": "xTmKNUCz0P4=",
   "success": true,
-  "projectFilePath": "E:\\Samuel Escuela P3\\HealthNest\\HealthNest\\HealthNest.csproj",
+  "projectFilePath": "E:\\Samuel Escuela P3\\HealthNest\\healthnest\\HealthNest.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USER\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.3\\microsoft.aspnetcore.app.internal.assets.10.0.3.nupkg.sha512",
