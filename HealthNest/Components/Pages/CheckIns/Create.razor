@@ -72,6 +72,22 @@
         checkIn.Mood = 3;
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        // Check for today's check-in every time the page is accessed (fix on deployment issue)
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = await UserManager.GetUserAsync(authState.User);
+        if (user == null) return;
+
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        var existing = Db.CheckIns.FirstOrDefault(c => c.UserId == user.Id && c.Date == today);
+
+        if (existing != null)
+        {
+            Navigation.NavigateTo($"/checkins/edit/{existing.Id}");
+        }
+    }
+
     private async Task HandleSubmit()
     {
         if (checkIn == null || checkIn.Mood < 1 || checkIn.Mood > 5)

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HealthNest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f2fbc213bbfdaab9df0ce9263b33a88d3912c1c8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+90233a42b3b62db64151cfe493090cfd0d24c21c")]
 [assembly: System.Reflection.AssemblyProductAttribute("HealthNest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HealthNest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
