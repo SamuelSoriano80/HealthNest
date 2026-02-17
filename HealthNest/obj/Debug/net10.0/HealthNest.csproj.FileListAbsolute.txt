@@ -2,7 +2,6 @@ E:\Samuel Escuela P3\HealthNest\HealthNest\bin\Debug\net10.0\appsettings.Develop
 E:\Samuel Escuela P3\HealthNest\HealthNest\bin\Debug\net10.0\appsettings.json
 E:\Samuel Escuela P3\HealthNest\HealthNest\bin\Debug\net10.0\HealthNest.staticwebassets.runtime.json
 E:\Samuel Escuela P3\HealthNest\HealthNest\bin\Debug\net10.0\HealthNest.staticwebassets.endpoints.json
-E:\Samuel Escuela P3\HealthNest\HealthNest\bin\Debug\net10.0\Data\app.db
 E:\Samuel Escuela P3\HealthNest\HealthNest\bin\Debug\net10.0\HealthNest.exe
 E:\Samuel Escuela P3\HealthNest\HealthNest\bin\Debug\net10.0\HealthNest.deps.json
 E:\Samuel Escuela P3\HealthNest\HealthNest\bin\Debug\net10.0\HealthNest.runtimeconfig.json
@@ -191,8 +190,6 @@ E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\compressed\6jzq6d1i
 E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\compressed\fgxa0f8fw9-{0}-abdmv1u4y3-abdmv1u4y3.gz
 E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\compressed\y6apk5ale6-{0}-ax6tuj8tun-ax6tuj8tun.gz
 E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\compressed\mjc2vmsxcc-{0}-zr4b1gdhaw-zr4b1gdhaw.gz
-E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\compressed\4eq7tfcylo-{0}-a4w55tfmue-a4w55tfmue.gz
-E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\compressed\bhbh5g0olp-{0}-a4w55tfmue-a4w55tfmue.gz
 E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\staticwebassets.build.json
 E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\staticwebassets.build.json.cache
 E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\staticwebassets.development.json
@@ -204,3 +201,7 @@ E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\refint\HealthNest.d
 E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\HealthNest.pdb
 E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\HealthNest.genruntimeconfig.cache
 E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\ref\HealthNest.dll
+E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\HealthNest.sourcelink.json
+E:\Samuel Escuela P3\HealthNest\HealthNest\bin\Debug\net10.0\Data\app.db
+E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\compressed\4eq7tfcylo-{0}-hukr0uuvii-hukr0uuvii.gz
+E:\Samuel Escuela P3\HealthNest\HealthNest\obj\Debug\net10.0\compressed\bhbh5g0olp-{0}-hukr0uuvii-hukr0uuvii.gz

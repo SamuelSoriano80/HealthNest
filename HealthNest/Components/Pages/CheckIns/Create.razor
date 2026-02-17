@@ -1,0 +1,101 @@
+@page "/checkins/create"
+@rendermode InteractiveServer
+@using HealthNest.Data
+@using HealthNest.Models
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Identity
+@inject ApplicationDbContext Db
+@inject NavigationManager Navigation
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h3 class="card-title">New Daily Check-In</h3>
+
+        <div class="mb-3">
+            <label class="form-label">Sleep Hours</label>
+            <input class="form-control" type="number" step="0.5" @bind="checkIn.SleepHours" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Water Intake (glasses)</label>
+            <input class="form-control" type="number" @bind="checkIn.WaterIntake" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Exercise Minutes</label>
+            <input class="form-control" type="number" @bind="checkIn.ExerciseMinutes" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Mood (1-5)</label>
+            <input class="form-control" type="number" min="1" max="5" @bind="checkIn.Mood" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Notes</label>
+            <textarea class="form-control" rows="4" @bind="checkIn.Notes"></textarea>
+        </div>
+
+        <button class="btn btn-primary me-2" @onclick="HandleSubmit">Save</button>
+        <a class="btn btn-secondary" href="/checkins">Cancel</a>
+    </div>
+</div>
+
+@code {
+    private CheckIn checkIn = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var currentUser = await UserManager.GetUserAsync(authState.User);
+
+        if (currentUser != null)
+        {
+            var today = DateOnly.FromDateTime(DateTime.Now);
+            var existing = Db.CheckIns.FirstOrDefault(c => c.UserId == currentUser.Id && c.Date == today);
+            if (existing != null)
+            {
+                // Redirect to edit if today's check-in already exists
+                Navigation.NavigateTo($"/checkins/edit/{existing.Id}");
+                return;
+            }
+        }
+
+        // sensible defaults
+        checkIn.SleepHours = 8;
+        checkIn.WaterIntake = 5;
+        checkIn.ExerciseMinutes = 30;
+        checkIn.Mood = 3;
+    }
+
+    private async Task HandleSubmit()
+    {
+        if (checkIn == null || checkIn.Mood < 1 || checkIn.Mood > 5)
+            return;
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = await UserManager.GetUserAsync(authState.User);
+        if (user == null) return;
+
+        // prevent race: if a record was created between page load and submit, redirect to edit
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        var existing = Db.CheckIns.FirstOrDefault(c => c.UserId == user.Id && c.Date == today);
+        if (existing != null)
+        {
+            Navigation.NavigateTo($"/checkins/edit/{existing.Id}");
+            return;
+        }
+
+        checkIn.UserId = user.Id;
+        checkIn.Date = today;
+
+        Db.CheckIns.Add(checkIn);
+        await Db.SaveChangesAsync();
+
+        Navigation.NavigateTo("/checkins");
+    }
+}

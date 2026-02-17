@@ -1,0 +1,117 @@
+@page "/goals/edit/{id:int}"
+@rendermode InteractiveServer
+@using HealthNest.Data
+@using HealthNest.Models
+@using HealthNest.Models.Enums
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Identity
+@inject ApplicationDbContext Db
+@inject NavigationManager Navigation
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h3 class="card-title">Edit Goal</h3>
+
+        @if (goal == null)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger">@errorMessage</div>
+            }
+            <div class="mb-3">
+                <label class="form-label">Category</label>
+                <select class="form-select" @bind="goal.Category">
+                    @foreach (var category in Enum.GetValues<GoalCategory>())
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Target Value</label>
+                <input class="form-control" type="number" @bind="goal.TargetValue" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Period</label>
+                <select class="form-select" @bind="goal.Period">
+                    @foreach (var p in Enum.GetValues<GoalPeriod>())
+                    {
+                        <option value="@p">@p</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" @bind="goal.IsActive" id="isActiveEdit" />
+                <label class="form-check-label" for="isActiveEdit">Active</label>
+            </div>
+
+            <button class="btn btn-primary me-2" @onclick="HandleUpdate">Update</button>
+            <a class="btn btn-secondary" href="/goals">Cancel</a>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public int id { get; set; }
+
+    private Goal? goal;
+    private string errorMessage = string.Empty;
+    private bool originalIsActive;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = await UserManager.GetUserAsync(authState.User);
+        if (user == null) return;
+
+        goal = Db.Goals.FirstOrDefault(g => g.Id == id && g.UserId == user.Id);
+        if (goal != null)
+        {
+            originalIsActive = goal.IsActive;
+        }
+    }
+
+    private async Task HandleUpdate()
+    {
+        if (goal == null) return;
+        if (goal.TargetValue < 1) return;
+
+        if (goal.IsActive)
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = await UserManager.GetUserAsync(authState.User);
+            if (user == null) return;
+
+            var existing = Db.Goals.FirstOrDefault(g => g.UserId == user.Id && g.Category == goal.Category && g.IsActive && g.Id !=
+goal.Id);
+            if (existing != null)
+            {
+                errorMessage = "Only one active goal is allowed per category. Deactivate the other goal first.";
+                // revert the in-memory change so the tracked entity doesn't show active in other views
+                if (goal != null)
+                {
+                    // reload from database to discard local modifications
+                    await Db.Entry(goal).ReloadAsync();
+                    originalIsActive = goal.IsActive;
+                }
+                StateHasChanged();
+                return;
+            }
+        }
+
+        Db.Goals.Update(goal);
+        await Db.SaveChangesAsync();
+        Navigation.NavigateTo("/goals");
+    }
+}

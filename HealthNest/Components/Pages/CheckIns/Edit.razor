@@ -1,0 +1,89 @@
+@page "/checkins/edit/{id:int}"
+@rendermode InteractiveServer
+@using HealthNest.Data
+@using HealthNest.Models
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext Db
+@inject NavigationManager Navigation
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
+
+<h3>Edit Check-In</h3>
+
+@if (checkIn == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="card mt-3">
+        <div class="card-body">
+            <h3 class="card-title">Edit Check-In</h3>
+
+            @if (checkIn == null)
+            {
+                <p>Loading...</p>
+            }
+            else
+            {
+                <div class="mb-3">
+                    <label class="form-label">Sleep Hours</label>
+                    <input class="form-control" type="number" step="0.5" @bind="checkIn.SleepHours" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Water Intake (glasses)</label>
+                    <input class="form-control" type="number" @bind="checkIn.WaterIntake" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Exercise Minutes</label>
+                    <input class="form-control" type="number" @bind="checkIn.ExerciseMinutes" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Mood (1-5)</label>
+                    <input class="form-control" type="number" min="1" max="5" @bind="checkIn.Mood" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Notes</label>
+                    <textarea class="form-control" rows="4" @bind="checkIn.Notes"></textarea>
+                </div>
+
+                <button class="btn btn-primary me-2" @onclick="HandleUpdate">Update</button>
+                <a class="btn btn-secondary" href="/checkins">Cancel</a>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+
+    private CheckIn? checkIn;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = await UserManager.GetUserAsync(authState.User);
+
+        checkIn = Db.CheckIns
+            .FirstOrDefault(c => c.Id == id && c.UserId == user.Id);
+    }
+
+    private async Task HandleUpdate()
+    {
+        if (checkIn == null || checkIn.Mood < 1 || checkIn.Mood > 5)
+        {
+            return;
+        }
+
+        await Db.SaveChangesAsync();
+        Navigation.NavigateTo("/checkins");
+    }
+}

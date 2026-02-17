@@ -1,7 +1,180 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+@using HealthNest.Data
+@using HealthNest.Models
+@using HealthNest.Models.Enums
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Home - HealthNest</PageTitle>
 
-<h1>Hello, world!</h1>
+@inject ApplicationDbContext Db
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
+@attribute [Authorize]
 
-Welcome to your new app.
+@if (currentUser != null)
+{
+    <!-- Welcome Section -->
+    <div class="mt-4 mb-5">
+        <h1 class="display-5">Welcome back, @currentUser.UserName!</h1>
+        <p class="text-muted fs-5 fst-italic">@RandomQuote</p>
+    </div>
+
+    <!-- Check-In Section -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Today's Wellness Check-In</h5>
+                </div>
+                <div class="card-body">
+                    @if (todayCheckIn != null)
+                    {
+                        <div class="mb-3">
+                            <p class="mb-2"><strong>Sleep:</strong> @todayCheckIn.SleepHours hours</p>
+                            <p class="mb-2"><strong>Water:</strong> @todayCheckIn.WaterIntake liters</p>
+                            <p class="mb-2"><strong>Exercise:</strong> @todayCheckIn.ExerciseMinutes minutes</p>
+                        </div>
+                        <button class="btn btn-primary"
+                                @onclick='() => Navigation.NavigateTo($"/checkins/edit/{todayCheckIn.Id}")'>Update Today\'s
+                            Check-In</button>
+                        }
+                    else
+                        {
+                            <p class="text-muted">No check-in recorded for today.</p>
+                            <button class="btn btn-success" @onclick='() => Navigation.NavigateTo("/checkins/create")'>Create
+                                Today's Check-In</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats Section -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="card-title mb-0">Quick Stats</h5>
+                        </div>
+                        <div class="card-body">
+                            @if (todayCheckIn != null)
+                            {
+                                <p class="mb-2"><span class="badge bg-success">Sleep</span> @todayCheckIn.SleepHours h</p>
+                                <p class="mb-2"><span class="badge bg-info">Water</span> @todayCheckIn.WaterIntake L</p>
+                                <p class="mb-2"><span class="badge bg-warning">Exercise</span> @todayCheckIn.ExerciseMinutes min</p>
+                            }
+                            else
+                            {
+                                <p class="text-muted">Complete your check-in to see stats.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Goals Section -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Active Goals</h5>
+                        <a class="btn btn-sm btn-light" href="/goals">View All Goals</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (activeGoals != null && activeGoals.Any())
+                    {
+                        @foreach (var goal in activeGoals)
+                        {
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="mb-0">@goal.Category - Target: @goal.TargetValue</h6>
+                                    <small class="text-muted">@goal.Period</small>
+                                </div>
+                                <div class="progress" style="height:24px;">
+                                    <div class="progress-bar" role="progressbar"
+                                         style="width:@($"{CalculateDailyProgress(goal, checkIns):0}")%"
+                                         aria-valuenow="@CalculateDailyProgress(goal, checkIns)" aria-valuemin="0" aria-valuemax="100">
+                                        @($"{CalculateDailyProgress(goal, checkIns):0}%")
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-3">No active goals yet. Start by creating one to stay motivated!</p>
+                        <a class="btn btn-success" href="/goals/create">Create Your First Goal</a>
+                    }
+                </div>
+            </div>
+        }
+else
+        {
+            <p>Loading...</p>
+        }
+
+@code {
+    private ApplicationUser? currentUser;
+    private CheckIn? todayCheckIn;
+    private List<Goal> activeGoals = new();
+    private List<CheckIn> checkIns = new();
+
+    private static readonly List<string> Quotes = new()
+    {
+        "The only way to do great work is to love what you do. - Steve Jobs",
+        "Take care of your body. It's the only place you have to live. - Jim Rohn",
+        "Health is a state of complete physical, mental and social well-being, not merely the absence of disease or infirmity.",
+        "An apple a day keeps the doctor away.",
+        "Your health is an investment, not an expense.",
+        "The greatest wealth is health. - Virgil",
+        "To keep the body in good health is a duty... otherwise we shall not be able to keep our mind strong and clear.",
+        "Take time for yourself. It's not selfish, it's essential."
+    };
+
+    private string RandomQuote => Quotes[Random.Shared.Next(Quotes.Count)];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        currentUser = await UserManager.GetUserAsync(authState.User);
+
+        if (currentUser == null) return;
+
+        var today = DateOnly.FromDateTime(DateTime.Now);
+
+        // Load today's check-in
+        todayCheckIn = Db.CheckIns
+            .FirstOrDefault(c => c.UserId == currentUser.Id && c.Date == today);
+
+        // Load active goals
+        activeGoals = Db.Goals
+            .Where(g => g.UserId == currentUser.Id && g.IsActive)
+            .ToList();
+
+        // Load all check-ins for progress calculation
+        checkIns = Db.CheckIns
+            .Where(c => c.UserId == currentUser.Id)
+            .ToList();
+    }
+
+    private decimal CalculateDailyProgress(Goal goal, List<CheckIn> userCheckIns)
+    {
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        var todayCheckInData = userCheckIns.FirstOrDefault(c => c.Date == today);
+
+        if (todayCheckInData == null)
+            return 0;
+
+        return goal.Category switch
+        {
+            GoalCategory.Sleep => todayCheckInData.SleepHours >= goal.TargetValue ? 100 : Math.Min(100,
+(decimal)(todayCheckInData.SleepHours / (decimal)goal.TargetValue * 100)),
+            GoalCategory.Water => todayCheckInData.WaterIntake >= goal.TargetValue ? 100 : Math.Min(100,
+(decimal)todayCheckInData.WaterIntake / goal.TargetValue * 100),
+            GoalCategory.Exercise => todayCheckInData.ExerciseMinutes >= goal.TargetValue ? 100 : Math.Min(100,
+(decimal)todayCheckInData.ExerciseMinutes / goal.TargetValue * 100),
+            _ => 0
+        };
+    }
+}

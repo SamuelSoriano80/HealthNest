@@ -1,0 +1,94 @@
+@page "/goals/create"
+@rendermode InteractiveServer
+@using HealthNest.Data
+@using HealthNest.Models
+@using HealthNest.Models.Enums
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@inject ApplicationDbContext Db
+@inject NavigationManager Navigation
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
+
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h3 class="card-title">Create Goal</h3>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger">@errorMessage</div>
+        }
+
+        <EditForm Model="goal" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="mb-3">
+                <label class="form-label">Category</label>
+                <InputSelect class="form-select" @bind-Value="goal.Category">
+                    @foreach (var category in Enum.GetValues<GoalCategory>())
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Target Value</label>
+                <InputNumber class="form-control" @bind-Value="goal.TargetValue" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Period</label>
+                <InputSelect class="form-select" @bind-Value="goal.Period">
+                    @foreach (var period in Enum.GetValues<GoalPeriod>())
+                    {
+                        <option value="@period">@period</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" @bind="goal.IsActive" id="isActive" />
+                <label class="form-check-label" for="isActive">Active</label>
+            </div>
+
+            <div class="d-flex">
+                <button class="btn btn-success me-2" type="submit">Save Goal</button>
+                <a class="btn btn-secondary" href="/goals">Cancel</a>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private Goal goal = new();
+    private string errorMessage = string.Empty;
+
+    private async Task HandleValidSubmit()
+    {
+        errorMessage = string.Empty;
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = await UserManager.GetUserAsync(authState.User);
+        if (user == null) return;
+
+        goal.UserId = user.Id;
+
+        if (goal.IsActive)
+        {
+            var existing = Db.Goals.FirstOrDefault(g => g.UserId == user.Id && g.Category == goal.Category && g.IsActive);
+            if (existing != null)
+            {
+                errorMessage = "Only one active goal is allowed per category. Deactivate the existing goal first.";
+                return;
+            }
+        }
+
+        Db.Goals.Add(goal);
+        await Db.SaveChangesAsync();
+
+        Navigation.NavigateTo("/goals");
+    }
+}

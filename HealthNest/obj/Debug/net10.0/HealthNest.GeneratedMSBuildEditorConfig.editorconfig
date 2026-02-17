@@ -194,16 +194,40 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/Auth.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBdXRoLnJhem9y
+[E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/CheckIns/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDaGVja0luc1xDcmVhdGUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
+[E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/CheckIns/Delete.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDaGVja0luc1xEZWxldGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/CheckIns/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDaGVja0luc1xFZGl0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/CheckIns/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDaGVja0luc1xJbmRleC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/Goals/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xHb2Fsc1xDcmVhdGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/Goals/Delete.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xHb2Fsc1xEZWxldGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/Goals/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xHb2Fsc1xFZGl0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/Goals/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xHb2Fsc1xJbmRleC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/Home.razor]
@@ -212,10 +236,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/NotFound.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xOb3RGb3VuZC5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Pages/Weather.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXZWF0aGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Samuel Escuela P3/HealthNest/HealthNest/Components/Routes.razor]

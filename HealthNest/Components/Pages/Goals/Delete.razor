@@ -1,0 +1,59 @@
+@page "/goals/delete/{id:int}"
+@rendermode InteractiveServer
+@using HealthNest.Data
+@using HealthNest.Models
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@inject ApplicationDbContext Db
+@inject NavigationManager Navigation
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h3 class="card-title">Delete Goal</h3>
+
+        @if (goal == null)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            <p>Are you sure you want to delete the goal <strong>@goal.Category - @goal.TargetValue (@goal.Period)</strong>?
+            </p>
+            <button class="btn btn-danger me-2" @onclick="DeleteItem">Yes, Delete</button>
+            <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public int id { get; set; }
+
+    private Goal? goal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = await UserManager.GetUserAsync(authState.User);
+        if (user == null) return;
+
+        goal = Db.Goals.FirstOrDefault(g => g.Id == id && g.UserId == user.Id);
+    }
+
+    private async Task DeleteItem()
+    {
+        if (goal != null)
+        {
+            Db.Goals.Remove(goal);
+            await Db.SaveChangesAsync();
+        }
+        Navigation.NavigateTo("/goals");
+    }
+
+    private void HandleCancel()
+    {
+        Navigation.NavigateTo("/goals");
+    }
+}

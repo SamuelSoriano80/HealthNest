@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace HealthNest.Models;
+
 public class CheckIn
 {
     public int Id { get; set; }
